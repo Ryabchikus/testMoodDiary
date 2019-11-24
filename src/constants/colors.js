@@ -1,0 +1,35 @@
+// Base colors
+const PRIMARY_BASIC = '#FF558B';
+const SECONDARY_BASIC = '#0684F8';
+const NEUTRALS_WHITE = '#FFFFFF';
+const NEUTRALS_GRAY_1 = '#E5E5E5';
+const NEUTRALS_GRAY_2 = '#454A52';
+const NEUTRALS_GRAY_3 = 'rgba(0, 0, 0, 0.1)';
+
+// Accent colors
+const ACCENT_YELLOW_LIGHT = '#FFCE51';
+const ACCENT_ORANGE_LIGHT = '#FFA73F';
+const ACCENT_ORANGE_DARK = '#FC7E56';
+const ACCENT_RED = '#FC5656';
+
+export const Base = {
+  PRIMARY: PRIMARY_BASIC,
+  SECONDARY: SECONDARY_BASIC,
+  GRAY_1: NEUTRALS_GRAY_1,
+  GRAY_2: NEUTRALS_GRAY_2,
+};
+
+export const Accents = {
+  YELLOW_LIGHT: ACCENT_YELLOW_LIGHT,
+  ORANGE_LIGHT: ACCENT_ORANGE_LIGHT,
+  ORANGE_DARK: ACCENT_ORANGE_DARK,
+  RED: ACCENT_RED,
+};
+
+export const Backgrounds = {
+  SCREENS: NEUTRALS_WHITE,
+};
+
+export const Borders = {
+  GRAY_BORDER: NEUTRALS_GRAY_3,
+};
