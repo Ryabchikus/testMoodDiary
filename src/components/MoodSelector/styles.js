@@ -9,9 +9,7 @@ export default StyleSheet.create({
     backgroundColor: Backgrounds.SCREENS,
   },
   moodsListContainer: {
-    padding: 16,
-    paddingBottom: 0,
-    paddingLeft: 2,
+    marginHorizontal: 16,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -22,7 +20,7 @@ export default StyleSheet.create({
     width: 73,
     height: 93,
     alignItems: 'center',
- },
+  },
   moodItem: {
     alignItems: 'center',
     paddingHorizontal: 6,

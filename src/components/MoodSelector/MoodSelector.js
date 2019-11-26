@@ -8,6 +8,7 @@ import MOOD_TYPES_ARR from '../../constants/moodTypes';
 
 import styles from './styles';
 import MoodIcon from '../MoodIcon';
+import BlockTitle from '../BlockTitle';
 
 type Props = {
   selectedMood: string,
@@ -40,6 +41,7 @@ export default function MoodSelector(props: Props) {
 
   return (
     <View style={styles.container}>
+      <BlockTitle title={i18n.t('mood')} />
       <ScrollView
         contentContainerStyle={styles.moodsListContainer}
         horizontal
