@@ -6,17 +6,24 @@ import {Interface} from '../../constants/graphics';
 import styles from './styles';
 
 type Props = {
-  children: Object,
   title: string,
-  withBackButton: boolean,
+  withBackButton?: boolean,
   handleBackButton?: Function,
+  containerStyle?: Object,
+  titleStyle?: Object,
 };
 
 export default function Header(props: Props) {
-  const {withBackButton, title, handleBackButton} = props;
+  const {
+    withBackButton = false,
+    title,
+    handleBackButton,
+    containerStyle = {},
+    titleStyle = {},
+  } = props;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.containerStyle, containerStyle]}>
       <View style={styles.buttonsWrapper}>
         {withBackButton ? (
           <TouchableOpacity
@@ -30,8 +37,10 @@ export default function Header(props: Props) {
           </TouchableOpacity>
         ) : null}
       </View>
-      <View style={styles.titles}>
-        {title ? <Text style={styles.title}>{title}</Text> : null}
+      <View style={styles.titleContainer}>
+        {title ? (
+          <Text style={[styles.titleStyle, titleStyle]}>{title}</Text>
+        ) : null}
       </View>
       <View style={styles.buttonsWrapper} />
     </View>
