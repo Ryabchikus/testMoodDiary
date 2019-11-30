@@ -39,7 +39,7 @@ export default function MoodSelector(props: Props) {
             const isActive = item.intensity > 0;
 
             return (
-              <View style={styles.subMood}>
+              <View key={item.subMoodKey} style={styles.subMood}>
                 <View style={styles.row}>
                   <View
                     style={[

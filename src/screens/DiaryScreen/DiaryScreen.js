@@ -17,33 +17,30 @@ import CustomButton from '../../components/CustomButton';
 import usePrevious from '../../hooks/usePrevious';
 
 export default function DiaryScreen() {
+  const {todayDiaryMood} = useSelector(state => state.diary);
   const [isEditingState, setIsEditingState] = useState(false);
   const [isEditingFinishedState, setIsEditingFinishedState] = useState(false);
-  const {todayDiaryMood} = useSelector(state => state.diary);
+  const [currentMood, setCurrentMood] = useState(todayDiaryMood);
   const dispatch = useDispatch();
   const dispatchSetDiaryMood = params => dispatch(setDiaryMood(params));
-  const prevTodayDiaryMood = usePrevious(todayDiaryMood);
+  const prevCurrentMood = usePrevious(currentMood);
 
-  const isValuesChanged =
-    !prevTodayDiaryMood || prevTodayDiaryMood !== todayDiaryMood;
+  const isValuesChanged = !prevCurrentMood || currentMood !== prevCurrentMood;
 
   function onSetMood(selectedMoodKey) {
-    dispatchSetDiaryMood({
-      moodKey: selectedMoodKey,
-    });
+    mergeState({moodKey: selectedMoodKey});
     setIsEditingState(true);
   }
 
   function onSetSubMood(subMoodIndex, value) {
-    const newSubMoods = todayDiaryMood.subMoods;
+    const newSubMoods = currentMood.subMoods;
 
     newSubMoods[subMoodIndex].intensity = value;
-    dispatchSetDiaryMood({
-      subMoods: newSubMoods,
-    });
+    mergeState({subMoods: newSubMoods});
   }
 
   function onFinishButtonPress() {
+    dispatchSetDiaryMood({...currentMood});
     setIsEditingState(false);
     setIsEditingFinishedState(true);
   }
@@ -53,14 +50,39 @@ export default function DiaryScreen() {
   }
 
   function onBackButtonPress() {
-    if (!isEditingFinishedState) {
-      dispatchSetDiaryMood({
-        moodKey: null,
-        //easy way to copy array with objects
-        subMoods: SUBMOOD_TYPES_ARR.map(subMood => ({...subMood})),
-      });
-    }
+    mergeState({
+      moodKey: null,
+      //easy way to copy array with objects
+      subMoods: SUBMOOD_TYPES_ARR.map(subMood => ({...subMood})),
+    });
     setIsEditingState(false);
+  }
+
+  function mergeState(newState) {
+    setCurrentMood(previousState => ({
+      ...previousState,
+      ...newState,
+    }));
+  }
+
+  function renderEditingState() {
+    return (
+      <>
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          style={styles.scrollView}>
+          <SubMoodsSelector
+            onSetSubMood={onSetSubMood}
+            subMoods={currentMood.subMoods}
+          />
+        </ScrollView>
+        <CustomButton
+          buttonLabel={i18n.t('finished')}
+          onPress={onFinishButtonPress}
+          disabled={!isValuesChanged}
+        />
+      </>
+    );
   }
 
   return (
@@ -77,26 +99,10 @@ export default function DiaryScreen() {
         ) : (
           <>
             <MoodSelector
-              selectedMood={todayDiaryMood.moodKey}
+              selectedMood={currentMood.moodKey}
               onSetMood={onSetMood}
             />
-            {isEditingState ? (
-              <>
-                <ScrollView
-                  contentInsetAdjustmentBehavior="automatic"
-                  style={styles.scrollView}>
-                  <SubMoodsSelector
-                    onSetSubMood={onSetSubMood}
-                    subMoods={todayDiaryMood.subMoods}
-                  />
-                </ScrollView>
-                <CustomButton
-                  buttonLabel={i18n.t('finished')}
-                  onPress={onFinishButtonPress}
-                  disabled={!isValuesChanged}
-                />
-              </>
-            ) : null}
+            {isEditingState ? renderEditingState() : null}
           </>
         )}
       </SafeAreaView>
