@@ -1,7 +1,7 @@
 /* @flow */
 
-import React, {useState} from 'react';
-import {SafeAreaView, ScrollView, StatusBar} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {BackHandler, SafeAreaView, ScrollView, StatusBar} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import i18n from 'i18next';
 
@@ -18,13 +18,15 @@ import usePrevious from '../../hooks/usePrevious';
 
 export default function DiaryScreen() {
   const {todayDiaryMood} = useSelector(state => state.diary);
+
   const [isEditingState, setIsEditingState] = useState(false);
   const [isEditingFinishedState, setIsEditingFinishedState] = useState(false);
   const [currentMood, setCurrentMood] = useState(todayDiaryMood);
+
   const dispatch = useDispatch();
   const dispatchSetDiaryMood = params => dispatch(setDiaryMood(params));
-  const prevCurrentMood = usePrevious(currentMood);
 
+  const prevCurrentMood = usePrevious(currentMood);
   const isValuesChanged = !prevCurrentMood || currentMood !== prevCurrentMood;
 
   function onSetMood(selectedMoodKey) {
@@ -57,7 +59,11 @@ export default function DiaryScreen() {
         subMoods: SUBMOOD_TYPES_ARR.map(subMood => ({...subMood})),
       });
     }
-    setIsEditingState(false);
+    if (isEditingState) {
+      setIsEditingState(false);
+      return true;
+    }
+    return false;
   }
 
   function mergeState(newState) {
@@ -66,6 +72,13 @@ export default function DiaryScreen() {
       ...newState,
     }));
   }
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', onBackButtonPress);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', onBackButtonPress);
+    };
+  });
 
   function renderEditingState() {
     return (

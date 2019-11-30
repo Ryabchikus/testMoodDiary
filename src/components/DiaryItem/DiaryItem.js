@@ -21,7 +21,6 @@ export default function MoodSelector(props: Props) {
     mood: {moodKey, subMoods},
     onPressEdit,
   } = props;
-  console.log({subMoods});
 
   return (
     <View style={styles.container}>
