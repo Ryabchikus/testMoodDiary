@@ -20,7 +20,10 @@ export default function DiaryScreen() {
   const {todayDiaryMood} = useSelector(state => state.diary);
 
   const [isEditingState, setIsEditingState] = useState(false);
-  const [isEditingFinishedState, setIsEditingFinishedState] = useState(false);
+  const [isEditingFinishedState, setIsEditingFinishedState] = useState(
+    Boolean(todayDiaryMood.moodKey),
+  );
+
   const [currentMood, setCurrentMood] = useState(todayDiaryMood);
 
   const dispatch = useDispatch();
@@ -35,7 +38,7 @@ export default function DiaryScreen() {
   }
 
   function onSetSubMood(subMoodIndex, value) {
-    const newSubMoods = currentMood.subMoods;
+    const newSubMoods = currentMood.subMoods.map(subMood => ({...subMood}));
 
     newSubMoods[subMoodIndex].intensity = value;
     mergeState({subMoods: newSubMoods});
