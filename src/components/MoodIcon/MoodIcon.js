@@ -1,7 +1,8 @@
 // @flow
 
 import React from 'react';
-import {Image, View} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
+import i18n from 'i18next';
 
 import {MOOD_TYPES_ARR} from '../../constants/moodTypes';
 
@@ -11,9 +12,12 @@ type Props = {
   moodKey: string,
   coverIcon?: number,
   containerStyle?: Object,
+  iconContainerStyle?: Object,
   iconStyle?: Object,
   coverStyle?: Object,
   coverIconStyle?: Object,
+  onPress?: Function,
+  disabled?: boolean,
 };
 
 function getMoodIcon(key) {
@@ -25,9 +29,16 @@ export default function MoodIcon(props: Props) {
     moodKey,
     coverIcon,
     containerStyle = {},
+    iconContainerStyle = {},
     iconStyle = {},
     coverIconStyle = {},
+    onPress = () => null,
+    disabled = true,
   } = props;
+
+  function onPressItem() {
+    onPress(moodKey);
+  }
 
   function renderCoverIcon() {
     if (coverIcon) {
@@ -42,12 +53,20 @@ export default function MoodIcon(props: Props) {
   }
 
   return (
-    <View style={[styles.containerStyle, containerStyle]}>
-      <Image
-        source={getMoodIcon(moodKey)}
-        style={[styles.iconStyle, iconStyle]}
-      />
-      {renderCoverIcon()}
-    </View>
+    <TouchableOpacity
+      disabled={disabled}
+      style={[styles.containerStyle, containerStyle]}
+      onPress={onPressItem}>
+      <View style={[styles.iconContainerStyle, iconContainerStyle]}>
+        <Image
+          source={getMoodIcon(moodKey)}
+          style={[styles.iconStyle, iconStyle]}
+        />
+        {renderCoverIcon()}
+      </View>
+      <Text number0fLines={2} style={styles.moodItemTitle}>
+        {i18n.t(moodKey)}
+      </Text>
+    </TouchableOpacity>
   );
 }

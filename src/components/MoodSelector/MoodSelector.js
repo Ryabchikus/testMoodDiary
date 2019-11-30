@@ -20,8 +20,10 @@ export default function MoodSelector(props: Props) {
 
   const scrollViewRef = useRef(null);
 
-  function setMoodType(key, index) {
-    onSetMood(key);
+  function setMoodType(pressedMoodKey) {
+    const index = MOOD_TYPES_ARR.findIndex(item => item.key === pressedMoodKey);
+
+    onSetMood(pressedMoodKey);
     if (scrollViewRef?.current) {
       scrollViewRef.current.scrollTo({x: index * 75, animated: true});
     }
@@ -47,28 +49,20 @@ export default function MoodSelector(props: Props) {
         horizontal
         showsHorizontalScrollIndicator={false}
         ref={scrollViewRef}>
-        {MOOD_TYPES_ARR.map((item, index) => {
+        {MOOD_TYPES_ARR.map(item => {
           const isActive = selectedMood === item.key;
 
           return (
-            <TouchableOpacity
+            <MoodIcon
               key={item.key}
+              moodKey={item.key}
+              isActive={isActive}
+              containerStyle={styles.moodItemContainer}
+              iconContainerStyle={isActive ? styles.moodItemActive : null}
+              iconStyle={isActive ? styles.iconStyleActive : null}
+              onPress={setMoodType}
               disabled={isActive}
-              style={styles.moodItemContainer}
-              onPress={() => setMoodType(item.key, index)}>
-              <MoodIcon
-                moodKey={item.key}
-                isActive={isActive}
-                containerStyle={[
-                  styles.moodItem,
-                  isActive ? styles.moodItemActive : null,
-                ]}
-                iconStyle={isActive ? styles.iconStyleActive : null}
-              />
-              <Text number0fLines={2} style={styles.moodItemTitle}>
-                {i18n.t(item.key)}
-              </Text>
-            </TouchableOpacity>
+            />
           );
         })}
       </ScrollView>
