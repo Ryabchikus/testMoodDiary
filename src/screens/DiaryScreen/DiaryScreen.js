@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, {useState} from 'react';
-import {SafeAreaView, ScrollView, View, Text, StatusBar} from 'react-native';
+import {SafeAreaView, ScrollView, StatusBar} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import i18n from 'i18next';
 
@@ -12,64 +12,93 @@ import styles from './styles';
 import MoodSelector from '../../components/MoodSelector';
 import Header from '../../components/Header';
 import SubMoodsSelector from '../../components/SubMoodsSelector';
+import DiaryItem from '../../components/DiaryItem';
+import CustomButton from '../../components/CustomButton';
+import usePrevious from '../../hooks/usePrevious';
 
 export default function DiaryScreen() {
   const [isEditingState, setIsEditingState] = useState(false);
-  const [isSelectedState, setIsSelectedState] = useState(false);
-  const {moodKey, subMoods} = useSelector(state => state.diary.todayDiaryMood);
+  const [isEditingFinishedState, setIsEditingFinishedState] = useState(false);
+  const {todayDiaryMood} = useSelector(state => state.diary);
   const dispatch = useDispatch();
-  const boundSetDiaryMood = params => dispatch(setDiaryMood(params));
+  const dispatchSetDiaryMood = params => dispatch(setDiaryMood(params));
+  const prevTodayDiaryMood = usePrevious(todayDiaryMood);
+
+  const isValuesChanged =
+    !prevTodayDiaryMood || prevTodayDiaryMood !== todayDiaryMood;
 
   function onSetMood(selectedMoodKey) {
-    boundSetDiaryMood({
+    dispatchSetDiaryMood({
       moodKey: selectedMoodKey,
-      createdAt: null, //FIXME:
     });
     setIsEditingState(true);
   }
 
   function onSetSubMood(subMoodIndex, value) {
-    const newSubMoods = subMoods;
+    const newSubMoods = todayDiaryMood.subMoods;
 
     newSubMoods[subMoodIndex].intensity = value;
-    boundSetDiaryMood({
+    dispatchSetDiaryMood({
       subMoods: newSubMoods,
     });
   }
 
-  function handleFinishButtonPress() {
+  function onFinishButtonPress() {
     setIsEditingState(false);
+    setIsEditingFinishedState(true);
   }
 
-  function handleBackButtonPress() {
-    boundSetDiaryMood({
-      moodKey: null,
-      createdAt: null,
-      subMoods: SUBMOOD_TYPES_ARR,
-    });
+  function onPressEdit() {
+    setIsEditingState(true);
+  }
+
+  function onBackButtonPress() {
+    if (!isEditingFinishedState) {
+      dispatchSetDiaryMood({
+        moodKey: null,
+        //easy way to copy array with objects
+        subMoods: SUBMOOD_TYPES_ARR.map(subMood => ({...subMood})),
+      });
+    }
     setIsEditingState(false);
   }
 
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
+      <SafeAreaView style={styles.full}>
         <Header
           withBackButton={isEditingState}
-          handleBackButtonPress={handleBackButtonPress}
+          onBackButtonPress={onBackButtonPress}
           title={i18n.t('diary')}
         />
-        <MoodSelector selectedMood={moodKey} onSetMood={onSetMood} />
-        {isEditingState ? (
-          <ScrollView
-            contentInsetAdjustmentBehavior="automatic"
-            style={styles.scrollView}>
-            <SubMoodsSelector
-              onSetSubMood={onSetSubMood}
-              subMoods={[...subMoods]}
+        {isEditingFinishedState && !isEditingState ? (
+          <DiaryItem onPressEdit={onPressEdit} mood={todayDiaryMood} />
+        ) : (
+          <>
+            <MoodSelector
+              selectedMood={todayDiaryMood.moodKey}
+              onSetMood={onSetMood}
             />
-          </ScrollView>
-        ) : null}
+            {isEditingState ? (
+              <>
+                <ScrollView
+                  contentInsetAdjustmentBehavior="automatic"
+                  style={styles.scrollView}>
+                  <SubMoodsSelector
+                    onSetSubMood={onSetSubMood}
+                    subMoods={todayDiaryMood.subMoods}
+                  />
+                </ScrollView>
+                <CustomButton
+                  buttonLabel={i18n.t('finished')}
+                  onPress={onFinishButtonPress}
+                  disabled={!isValuesChanged}
+                />
+              </>
+            ) : null}
+          </>
+        )}
       </SafeAreaView>
     </>
   );

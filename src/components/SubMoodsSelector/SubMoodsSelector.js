@@ -25,6 +25,7 @@ export default function SubMoodSelector(props: Props) {
       <View key={subMood.subMoodKey} style={styles.containerStyle}>
         <Text style={styles.textStyle}>{`${i18n.t('valueOf')} ${i18n.t(
           subMood.subMoodKey,
+          {count: 2},
         )}`}</Text>
         <Text
           style={[
@@ -40,23 +41,25 @@ export default function SubMoodSelector(props: Props) {
             minimumValue={0}
             maximumValue={INTENSITY_NAMES.length - 1}
             step={1}
+            value={subMood.intensity}
             minimumTrackTintColor="transparent"
             maximumTrackTintColor="transparent"
             thumbTintColor={currentColor}
-            onValueChange={handleSetSubMood}>
-            <View style={styles.sliderBackgroundContainer}>
-              {INTENSITY_COLORS.slice(1).map((color, index) => (
-                <View
-                  style={[
-                    styles.sliderBackgroundItem,
-                    index <= subMood.intensity - 1
-                      ? {backgroundColor: color}
-                      : null,
-                  ]}
-                />
-              ))}
-            </View>
-          </Slider>
+            onValueChange={handleSetSubMood}
+          />
+          <View style={styles.sliderBackgroundContainer}>
+            {INTENSITY_COLORS.slice(1).map((color, index) => (
+              <View
+                key={color}
+                style={[
+                  styles.sliderBackgroundItem,
+                  index <= subMood.intensity - 1
+                    ? {backgroundColor: color}
+                    : null,
+                ]}
+              />
+            ))}
+          </View>
         </View>
       </View>
     );

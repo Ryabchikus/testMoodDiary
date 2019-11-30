@@ -7,6 +7,7 @@ const NEUTRALS_GRAY_2 = '#454A52';
 const NEUTRALS_GRAY_3 = 'rgba(0, 0, 0, 0.1)';
 const NEUTRALS_GRAY_4 = '#EEEEEE';
 const NEUTRALS_GRAY_5 = '#A1A9B5';
+const NEUTRALS_GRAY_6 = '#C6CAD0';
 const NEUTRALS_BLACK = '#000000';
 
 // Accent colors
@@ -21,6 +22,7 @@ export const Base = {
   GRAY_1: NEUTRALS_GRAY_1,
   GRAY_2: NEUTRALS_GRAY_2,
   GRAY_3: NEUTRALS_GRAY_5,
+  GRAY_4: NEUTRALS_GRAY_6,
   WHITE: NEUTRALS_WHITE,
   BLACK: NEUTRALS_BLACK,
 };
