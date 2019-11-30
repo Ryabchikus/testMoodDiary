@@ -194,7 +194,6 @@
 				77AB9E23BD0A8054B366433A /* Pods-testMoodDiaryTests.debug.xcconfig */,
 				8B715A49CF3D4314AD847DCC /* Pods-testMoodDiaryTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -308,6 +307,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
