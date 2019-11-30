@@ -8,7 +8,7 @@ import styles from './styles';
 type Props = {
   title: string,
   withBackButton?: boolean,
-  handleBackButton?: Function,
+  handleBackButtonPress?: Function,
   containerStyle?: Object,
   titleStyle?: Object,
 };
@@ -17,7 +17,7 @@ export default function Header(props: Props) {
   const {
     withBackButton = false,
     title,
-    handleBackButton,
+    handleBackButtonPress,
     containerStyle = {},
     titleStyle = {},
   } = props;
@@ -27,7 +27,7 @@ export default function Header(props: Props) {
       <View style={styles.buttonsWrapper}>
         {withBackButton ? (
           <TouchableOpacity
-            onPress={handleBackButton}
+            onPress={handleBackButtonPress}
             style={styles.buttonContainer}>
             <Image
               source={Interface.BACK}

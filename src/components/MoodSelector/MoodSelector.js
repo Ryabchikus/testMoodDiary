@@ -4,7 +4,7 @@ import React, {useRef, useEffect} from 'react';
 import {TouchableOpacity, View, Text, ScrollView} from 'react-native';
 import i18n from 'i18next';
 
-import MOOD_TYPES_ARR from '../../constants/moodTypes';
+import {MOOD_TYPES_ARR} from '../../constants/moodTypes';
 
 import styles from './styles';
 import MoodIcon from '../MoodIcon';

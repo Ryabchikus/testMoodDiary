@@ -3,7 +3,7 @@
 import React from 'react';
 import {Image, View} from 'react-native';
 
-import MOOD_TYPES from '../../constants/moodTypes';
+import {MOOD_TYPES_ARR} from '../../constants/moodTypes';
 
 import styles from './styles';
 
@@ -17,7 +17,7 @@ type Props = {
 };
 
 function getMoodIcon(key) {
-  return MOOD_TYPES.find(st => st.key === key).icon;
+  return MOOD_TYPES_ARR.find(st => st.key === key).icon;
 }
 
 export default function MoodIcon(props: Props) {

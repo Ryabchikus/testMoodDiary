@@ -1,74 +1,76 @@
 /* @flow */
 
-import React, {useState} from "react";
-import { SafeAreaView, ScrollView, View, Text, StatusBar } from "react-native";
-import {
-  DebugInstructions,
-} from "react-native/Libraries/NewAppScreen";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
+import React, {useState} from 'react';
+import {SafeAreaView, ScrollView, View, Text, StatusBar} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
 import i18n from 'i18next';
 
-import * as diaryActions from "../../constants/actionTypes";
-import { Icons, Interface } from "../../constants/graphics";
+import {setDiaryMood} from '../../redux/diary';
+import {SUBMOOD_TYPES_ARR} from '../../constants/moodTypes';
 
-import styles from "./styles";
-import MoodSelector from "../../components/MoodSelector";
-import Header from "../../components/Header";
+import styles from './styles';
+import MoodSelector from '../../components/MoodSelector';
+import Header from '../../components/Header';
+import SubMoodsSelector from '../../components/SubMoodsSelector';
 
-function DiaryScreen() {
+export default function DiaryScreen() {
+  const [isEditingState, setIsEditingState] = useState(false);
+  const [isSelectedState, setIsSelectedState] = useState(false);
+  const {moodKey, subMoods} = useSelector(state => state.diary.todayDiaryMood);
+  const dispatch = useDispatch();
+  const boundSetDiaryMood = params => dispatch(setDiaryMood(params));
 
-const [selectedMood, setSelectedMood] = useState('')
-const [isEditState, setIsEditState] = useState(false)
-
-  function onSetMood(moodKey) {
-    setSelectedMood(moodKey);
-    setIsEditState(true)
+  function onSetMood(selectedMoodKey) {
+    boundSetDiaryMood({
+      moodKey: selectedMoodKey,
+      createdAt: null, //FIXME:
+    });
+    setIsEditingState(true);
   }
 
-  function handleBackButton() {
-    setSelectedMood('');
-    setIsEditState(false)
+  function onSetSubMood(subMoodIndex, value) {
+    const newSubMoods = subMoods;
+
+    newSubMoods[subMoodIndex].intensity = value;
+    boundSetDiaryMood({
+      subMoods: newSubMoods,
+    });
+  }
+
+  function handleFinishButtonPress() {
+    setIsEditingState(false);
+  }
+
+  function handleBackButtonPress() {
+    boundSetDiaryMood({
+      moodKey: null,
+      createdAt: null,
+      subMoods: SUBMOOD_TYPES_ARR,
+    });
+    setIsEditingState(false);
   }
 
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
-        <Header withBackButton={isEditState} handleBackButton={handleBackButton} title={i18n.t('diary')} />
-        <MoodSelector selectedMood={selectedMood} onSetMood={onSetMood} />
-        {isEditState ? (<ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}
-        >
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-          </View>
-        </ScrollView>) : null}
+        <Header
+          withBackButton={isEditingState}
+          handleBackButtonPress={handleBackButtonPress}
+          title={i18n.t('diary')}
+        />
+        <MoodSelector selectedMood={moodKey} onSetMood={onSetMood} />
+        {isEditingState ? (
+          <ScrollView
+            contentInsetAdjustmentBehavior="automatic"
+            style={styles.scrollView}>
+            <SubMoodsSelector
+              onSetSubMood={onSetSubMood}
+              subMoods={[...subMoods]}
+            />
+          </ScrollView>
+        ) : null}
       </SafeAreaView>
     </>
   );
 }
-
-const mapStateToProps = (state) => {
-  return {
-    diary: state.diary,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    actions: bindActionCreators(diaryActions, dispatch),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DiaryScreen);

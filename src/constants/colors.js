@@ -5,6 +5,8 @@ const NEUTRALS_WHITE = '#FFFFFF';
 const NEUTRALS_GRAY_1 = '#E5E5E5';
 const NEUTRALS_GRAY_2 = '#454A52';
 const NEUTRALS_GRAY_3 = 'rgba(0, 0, 0, 0.1)';
+const NEUTRALS_GRAY_4 = '#EEEEEE';
+const NEUTRALS_GRAY_5 = '#A1A9B5';
 const NEUTRALS_BLACK = '#000000';
 
 // Accent colors
@@ -18,6 +20,7 @@ export const Base = {
   SECONDARY: SECONDARY_BASIC,
   GRAY_1: NEUTRALS_GRAY_1,
   GRAY_2: NEUTRALS_GRAY_2,
+  GRAY_3: NEUTRALS_GRAY_5,
   WHITE: NEUTRALS_WHITE,
   BLACK: NEUTRALS_BLACK,
 };
@@ -34,5 +37,6 @@ export const Backgrounds = {
 };
 
 export const Borders = {
-  GRAY_BORDER: NEUTRALS_GRAY_3,
+  GRAY_BORDER_1: NEUTRALS_GRAY_3,
+  GRAY_BORDER_2: NEUTRALS_GRAY_4,
 };
