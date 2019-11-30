@@ -3,9 +3,9 @@ import reducer from './reducer';
 
 export default reducer;
 
-export function updateLogin(item) {
+export function setDiaryMood(params) {
   return {
-    type: ActionTypes.ADD_DIARY_ITEM,
-    payload: item,
+    type: ActionTypes.SET_DIARY_MOOD,
+    payload: params,
   };
 }

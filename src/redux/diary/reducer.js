@@ -1,11 +1,18 @@
 /* @flow */
 
 import * as ActionTypes from '../../constants/actionTypes';
+import {SUBMOOD_TYPES_ARR} from '../../constants/moodTypes';
+
+type SubMood = {
+  subMoodKey: string | null,
+  intensity: number,
+};
 
 type State = {
-  currentDiaryItem: {
-    key: string | null,
+  todayDiaryMood: {
+    moodKey: string | null,
     createdAt: number | null,
+    subMoods: Array<SubMood>,
   },
 };
 
@@ -15,16 +22,25 @@ type Action = {
 };
 
 const initialState: State = {
-  currentDiaryItem: {
-    key: null,
+  todayDiaryMood: {
+    moodKey: null,
     createdAt: null,
+    subMoods: SUBMOOD_TYPES_ARR.map(subMood => ({...subMood})),
   },
 };
 
 export default function diary(state: State = initialState, action: Action) {
   switch (action.type) {
-    case ActionTypes.ADD_DIARY_ITEM: {
-      return state;
+    case ActionTypes.SET_DIARY_MOOD: {
+      const {payload} = action;
+
+      return {
+        ...state,
+        todayDiaryMood: {
+          ...state.todayDiaryMood,
+          ...payload,
+        },
+      };
     }
 
     default:

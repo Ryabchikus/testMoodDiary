@@ -1,1 +1,1 @@
-export const ADD_DIARY_ITEM = 'ADD_DIARY_ITEM';
+export const SET_DIARY_MOOD = 'diary/SET_DIARY_MOOD';
