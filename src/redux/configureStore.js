@@ -8,7 +8,7 @@ import diary from './diary';
 
 const persistConfig = {
   key: 'root',
-  whitelist: ['diary'],
+  whitelist: [], //['diary'],
   storage: AsyncStorage,
 };
 

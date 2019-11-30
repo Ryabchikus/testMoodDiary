@@ -30,6 +30,7 @@ export default StyleSheet.create({
     flex: 1,
     height: 26,
     ...StyleSheet.absoluteFill,
+    elevation: 10,
   },
   sliderBackgroundContainer: {
     flex: 1,

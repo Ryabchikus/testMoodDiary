@@ -11,7 +11,6 @@ type SubMood = {
 type State = {
   todayDiaryMood: {
     moodKey: string | null,
-    createdAt: number | null,
     subMoods: Array<SubMood>,
   },
 };
@@ -24,7 +23,7 @@ type Action = {
 const initialState: State = {
   todayDiaryMood: {
     moodKey: null,
-    createdAt: null,
+    //easy way to copy array with objects
     subMoods: SUBMOOD_TYPES_ARR.map(subMood => ({...subMood})),
   },
 };
