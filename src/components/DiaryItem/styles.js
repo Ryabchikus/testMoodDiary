@@ -21,6 +21,7 @@ export default StyleSheet.create({
   },
   subMood: {
     flex: 1,
+    justifyContent: 'center',
   },
   row: {
     flexDirection: 'row',
@@ -51,7 +52,7 @@ export default StyleSheet.create({
     color: Base.BLACK,
   },
   editButton: {
-    //
+    marginVertical: 7,
   },
 
   editIcon: {

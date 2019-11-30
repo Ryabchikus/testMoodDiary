@@ -50,11 +50,13 @@ export default function DiaryScreen() {
   }
 
   function onBackButtonPress() {
-    mergeState({
-      moodKey: null,
-      //easy way to copy array with objects
-      subMoods: SUBMOOD_TYPES_ARR.map(subMood => ({...subMood})),
-    });
+    if (!isEditingFinishedState) {
+      mergeState({
+        moodKey: null,
+        //easy way to copy array with objects
+        subMoods: SUBMOOD_TYPES_ARR.map(subMood => ({...subMood})),
+      });
+    }
     setIsEditingState(false);
   }
 
