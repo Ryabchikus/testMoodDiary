@@ -1,7 +1,7 @@
 // @flow
 
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Platform} from 'react-native';
 import Slider from '@react-native-community/slider';
 import i18n from 'i18next';
 
@@ -16,6 +16,23 @@ type Props = {
 
 export default function SubMoodSelector(props: Props) {
   const {onSetSubMood, subMoods} = props;
+  const isAndroid = Platform.OS === 'android';
+
+  function renderBackGround(subMood) {
+    return (
+      <View style={styles.sliderBackgroundContainer}>
+        {INTENSITY_COLORS.slice(1).map((color, index) => (
+          <View
+            key={color}
+            style={[
+              styles.sliderBackgroundItem,
+              index <= subMood.intensity - 1 ? {backgroundColor: color} : null,
+            ]}
+          />
+        ))}
+      </View>
+    );
+  }
 
   return subMoods.map((subMood, subMoodIndex) => {
     const currentColor = INTENSITY_COLORS[subMood.intensity];
@@ -45,21 +62,11 @@ export default function SubMoodSelector(props: Props) {
             minimumTrackTintColor="transparent"
             maximumTrackTintColor="transparent"
             thumbTintColor={currentColor}
-            onValueChange={handleSetSubMood}
-          />
-          <View style={styles.sliderBackgroundContainer}>
-            {INTENSITY_COLORS.slice(1).map((color, index) => (
-              <View
-                key={color}
-                style={[
-                  styles.sliderBackgroundItem,
-                  index <= subMood.intensity - 1
-                    ? {backgroundColor: color}
-                    : null,
-                ]}
-              />
-            ))}
-          </View>
+            onValueChange={handleSetSubMood}>
+            {/* workaround for suppression of the popping background image to the foreground */}
+            {!isAndroid ? renderBackGround(subMood) : null}
+          </Slider>
+          {isAndroid ? renderBackGround(subMood) : null}
         </View>
       </View>
     );
