@@ -9,5 +9,6 @@ export default StyleSheet.create({
   },
   full: {
     flex: 1,
+    marginBottom: 7,
   },
 });
